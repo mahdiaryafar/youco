@@ -16,7 +16,13 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice','voices[0].id')
 
-def  speak(text):
+lang = input('fa, en')
+if lang == 'fa':
+    lang = 'fa-IR'
+else:
+    lang = 'en-US'
+
+def speak(text):
     engine.say(text)
     engine.runAndWait()
 
@@ -24,13 +30,10 @@ def wishMe():
     hour = datetime.datetime.now().hour
     if hour >= 0 and hour < 12:
         speak("Hello,Good Morning")
-        print("Hello,Good Morning")
     elif 12 <= hour < 18:
         speak("Hello,Good Afternoon")
-        print("Hello,Good Afternoon")
     else:
         speak("Hello,Good Evening")
-        print("Hello,Good Evening")
 
 def takeCommand():
     r = sr.Recognizer()
@@ -41,18 +44,18 @@ def takeCommand():
     try:
         statement = r.recognize_google(audio,language='fa-IR')
         print(f"user said:{statement}\n")
-        return statement
+        if statement == None:
+            return 0
+        else:
+            return statement
 
     except Exception as e:
         speak("Pardon me, please say that again")
         return None
 
-    
 
-print("Loading your AI personal assistant G-One")
 speak("Loading your AI personal assistant G-One")
 wishMe()
-
 
 if __name__=='__main__':
     while True:
