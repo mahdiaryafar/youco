@@ -14,13 +14,14 @@ import requests
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
-engine.setProperty('voice','voices[0].id')
+engine.setProperty('voice', 'voices[0].id')
 
-lang = input('fa, en')
+lang = input('fa OR en? ')
 if lang == 'fa':
     lang = 'fa-IR'
 else:
     lang = 'en-US'
+
 
 def speak(text):
     engine.say(text)
@@ -38,31 +39,37 @@ def wishMe():
 def takeCommand():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        speak("Listening...")
+        speak("listening...")
         audio = r.listen(source)
         print(audio)
     try:
-        statement = r.recognize_google(audio,language='fa-IR')
+        statement = r.recognize_google(audio, language=lang)
         print(f"user said:{statement}\n")
-        if statement == None:
-            return 0
-        else:
-            return statement
+        return statement
 
     except Exception as e:
         speak("Pardon me, please say that again")
-        return None
+        return 0
 
-
-speak("Loading your AI personal assistant G-One")
+speak("Loading yooucoo")
 wishMe()
-
-if __name__=='__main__':
+if __name__ == '__main__':
+    speak("Tell me how can I help you now?")
     while True:
-        speak("Tell me how can I help you now?")
         statement = takeCommand()
         if statement == 0:
             continue
-        if "good bye" in statement or "ok bye" in statement or "stop" in statement:
-            speak('your personal assistant G-one is shutting down,Good bye')
+        if "خداحافظ" in statement or "خدانگهدار" in statement or "تمام" in statement or "پایان" in statement or "good bye" in statement or "ok bye" in statement or "stop" in statement:
+            speak('yooucoo is shutting down,Good bye')
             break
+        elif 'open google' in statement or "گوگل" in statement:
+            webbrowser.open_new_tab("https://www.google.com")
+            speak("Google chrome is open now")
+            time.sleep(5)	
+        elif 'open gmail' in statement or "جیمیل" in statement:
+            webbrowser.open_new_tab("gmail.com")
+            speak("Google Mail open now")
+            time.sleep(5)
+        elif 'time' in statement or "زمان" in statement or "ساعت چنده" in statement:
+            strTime=datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"the time is {strTime}")
